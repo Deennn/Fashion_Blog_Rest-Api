@@ -21,6 +21,7 @@ public class Post {
     private String description;
     @Column(nullable = false)
     private String content;
+    private long likeCount;
 
 
 //    @ManyToMany(fetch = FetchType.EAGER)
