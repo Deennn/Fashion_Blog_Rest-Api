@@ -3,6 +3,8 @@ package com.example.fashion_blog.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 @Getter @Setter @ToString
@@ -21,6 +23,7 @@ public class Post {
     private String description;
     @Column(nullable = false)
     private String content;
+   @NotNull
     private long likeCount;
 
 

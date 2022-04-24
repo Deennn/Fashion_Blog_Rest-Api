@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void signUp(SignupDto signupDto) {
+    public User signUp(SignupDto signupDto) {
         User user = new User();
 
         user.setFullName(signupDto.getName());
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
         Role roles  = roleRepository.findByName("ROLE_USER").get();
         user.setRoles(Collections.singleton(roles));
-        userRepository.save(user);
+       return userRepository.save(user);
     }
 
 

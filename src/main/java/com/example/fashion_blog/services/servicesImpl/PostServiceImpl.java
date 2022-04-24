@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -67,8 +68,10 @@ public class PostServiceImpl implements PostService {
         Page<Post> posts = postRepository.findAll(pageable);
         List<Post> postList = posts.getContent();
         List<PostDto> content  = postList.stream().map(this::mapToDto).toList();
+//        List<>
         PostResponse postResponse = new PostResponse();
         postResponse.setContent(content);
+
         postResponse.setPageNo(posts.getNumber());
         postResponse.setTotalPages(posts.getTotalPages());
         postResponse.setPageSize(posts.getSize());
@@ -85,6 +88,7 @@ public class PostServiceImpl implements PostService {
         getPostResponse.setTitle(post.getTitle());
         getPostResponse.setDescription(post.getDescription());
         getPostResponse.setContent(post.getContent());
+        getPostResponse.setLikeCount(post.getLikeCount());
         getPostResponse.setCategory(post.getCategory());
 
 //        getPostResponse.setComments(post.getComments());
@@ -97,6 +101,7 @@ public class PostServiceImpl implements PostService {
         post.setTitle(postDto.getTitle());
         post.setDescription(postDto.getDescription());
         post.setContent(postDto.getContent());
+
         Post updatedPost = postRepository.save(post);
 
         return mapToDto(updatedPost);
@@ -105,6 +110,23 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePostById(Long id) {
         postRepository.delete(postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id)));
+    }
+
+    @Override
+    public Post getPostByTitle(SearchDto searchDto) {
+
+        List<Post> posts = postRepository.findAll();
+        Optional<Post> post = posts.stream().filter(x -> x.getTitle().equals(searchDto.getTitle())).findFirst();
+//        GetPostResponse getPostResponse = new GetPostResponse();
+//        getPostResponse.setId(post.getId());
+//        getPostResponse.setTitle(post.getTitle());
+//        getPostResponse.setDescription(post.getDescription());
+//        getPostResponse.setContent(post.getContent());
+//        getPostResponse.setLikeCount(post.getLikeCount());
+//        getPostResponse.setCategory(post.getCategory());
+
+//        getPostResponse.setComments(post.getComments());
+        return post.orElse(null);
     }
 
     private Post mapToEntity(PostDto postDto) {

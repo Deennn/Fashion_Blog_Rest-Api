@@ -4,6 +4,7 @@ package com.example.fashion_blog.controllers;
 import com.example.fashion_blog.dtos.GetPostResponse;
 import com.example.fashion_blog.dtos.PostDto;
 import com.example.fashion_blog.dtos.PostResponse;
+import com.example.fashion_blog.dtos.SearchDto;
 import com.example.fashion_blog.entities.Post;
 import com.example.fashion_blog.services.PostService;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,13 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.create(postDto));
 
     }
+
+//    @PostMapping("/searchDto")
+//    public ResponseEntity<Post> getPost(@RequestBody SearchDto searchDto) {
+////       return new ResponseEntity<>(postService.create(postDto), HttpStatus.CREATED);
+//        return ResponseEntity.ok().body(postService.getPostByTitle(searchDto));
+//
+//    }
 
     @GetMapping
     public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNo", defaultValue = DEFAULT_PAGE_NUMBER, required = false) int pageNo,

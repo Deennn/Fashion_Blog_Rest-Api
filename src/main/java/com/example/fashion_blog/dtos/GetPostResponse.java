@@ -17,6 +17,7 @@ public class GetPostResponse {
     private String title;
     private String description;
     private String content;
+    private long likeCount;
     private Category category;
 //    private Set<Comment> comments;
 

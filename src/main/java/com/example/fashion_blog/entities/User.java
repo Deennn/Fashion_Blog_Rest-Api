@@ -1,8 +1,6 @@
 package com.example.fashion_blog.entities;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,6 +9,9 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"}),  @UniqueConstraint(columnNames = {"email"})})
 public class User {
 
