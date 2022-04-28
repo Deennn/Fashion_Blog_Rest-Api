@@ -5,18 +5,19 @@ import com.example.fashion_blog.dtos.PostDto;
 import com.example.fashion_blog.dtos.PostResponse;
 import com.example.fashion_blog.dtos.SearchDto;
 import com.example.fashion_blog.entities.Post;
+import org.springframework.http.ResponseEntity;
 
 public interface PostService {
 
-    PostDto create(PostDto postDto);
+    ResponseEntity<PostDto> create(PostDto postDto);
 
-    PostResponse getAllPost(int pageNo, int pageSize, String sortBy, String sortDir);
+    ResponseEntity<PostResponse>getAllPost(int pageNo, int pageSize, String sortBy, String sortDir);
 
-    GetPostResponse getPostById(Long id);
+    ResponseEntity<GetPostResponse> getPostById(Long id);
 
-    PostDto updatePost(PostDto postDto, Long id);
+    ResponseEntity<PostDto> updatePost(PostDto postDto, Long id);
 
-    void deletePostById(Long id);
+    ResponseEntity<String>  deletePostById(Long id);
 
-    Post getPostByTitle(SearchDto searchDto);
+//    Post getPostByTitle(SearchDto searchDto);
 }

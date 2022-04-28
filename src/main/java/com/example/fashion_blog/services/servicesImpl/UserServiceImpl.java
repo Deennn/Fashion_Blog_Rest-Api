@@ -3,6 +3,7 @@ package com.example.fashion_blog.services.servicesImpl;
 import com.example.fashion_blog.dtos.SignupDto;
 import com.example.fashion_blog.entities.Role;
 import com.example.fashion_blog.entities.User;
+import com.example.fashion_blog.exceptions.ResourceNotFoundException;
 import com.example.fashion_blog.repositories.RoleRepository;
 import com.example.fashion_blog.repositories.UserRepository;
 import com.example.fashion_blog.services.UserService;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     @Override
     public User signUp(SignupDto signupDto) {
         User user = new User();
@@ -35,8 +38,16 @@ public class UserServiceImpl implements UserService {
         user.setEmail(signupDto.getEmail());
         user.setPassword(passwordEncoder.encode(signupDto.getPassword()));
 
-        Role roles  = roleRepository.findByName("ROLE_USER").get();
-        user.setRoles(Collections.singleton(roles));
+
+        Role role = Role.builder()
+                .name("ROLE_USER")
+                .build();
+
+        user.setRoles(Collections.singleton(role));
+
+        Optional<User> savedUser = userRepository.findByEmail(user.getEmail());
+
+        if (savedUser.isPresent()) throw new ResourceNotFoundException("user", "userId", user.getId());
        return userRepository.save(user);
     }
 
@@ -48,6 +59,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean emailExists(String email) {
-        return userRepository.existsByUsername(email);
+        return userRepository.existsByEmail(email);
     }
 }

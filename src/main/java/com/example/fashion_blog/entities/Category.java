@@ -1,8 +1,6 @@
 package com.example.fashion_blog.entities;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +10,9 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "categories")
 public class Category {
 

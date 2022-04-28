@@ -1,8 +1,6 @@
 package com.example.fashion_blog.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -10,6 +8,11 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+
+
 public class CommentDto {
 
     private Long id;

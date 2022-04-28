@@ -10,9 +10,12 @@ import com.example.fashion_blog.repositories.PostRepository;
 import com.example.fashion_blog.services.CategoryService;
 import com.example.fashion_blog.services.PostService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +30,7 @@ public class PostServiceImpl implements PostService {
     private final CategoryService categoryService;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public PostServiceImpl(PostRepository postRepository, CategoryRepository categoryRepository, CategoryService categoryService, ModelMapper modelMapper) {
         this.postRepository = postRepository;
         this.categoryRepository = categoryRepository;
@@ -39,14 +43,18 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public PostDto create(PostDto postDto) {
+    public ResponseEntity<PostDto> create(PostDto postDto) {
         Category category = categoryRepository.findByName(postDto.getCategoryName());
 
         if (category != null) {
             Post post = mapToEntity(postDto);
+//            Post post = new Post();
+//            post.setContent(postDto.getContent());
+            System.out.println(post);
             post.setCategory(category);
             Post newPost = postRepository.save(post);
-            return mapToDto(newPost);
+            PostDto p = mapToDto(newPost);
+            return ResponseEntity.status(HttpStatus.CREATED).body(p);
         }
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setName(postDto.getCategoryName());
@@ -55,12 +63,13 @@ public class PostServiceImpl implements PostService {
         Post post = mapToEntity(postDto);
         post.setCategory(category1);
         Post newPost1 = postRepository.save(post);
-        return mapToDto(newPost1);
+        PostDto p = mapToDto(newPost1);
+        return ResponseEntity.status(HttpStatus.CREATED).body(p);
 
     }
 
     @Override
-    public PostResponse getAllPost(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public ResponseEntity<PostResponse> getAllPost(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending(): Sort.by(sortBy).descending();
 
         PageRequest pageable = PageRequest.of(pageNo, pageSize, sort);
@@ -77,11 +86,11 @@ public class PostServiceImpl implements PostService {
         postResponse.setPageSize(posts.getSize());
         postResponse.setLast(posts.isLast());
         postResponse.setTotalElements(posts.getTotalElements());
-        return postResponse;
+        return ResponseEntity.ok(postResponse);
     }
 
     @Override
-    public GetPostResponse getPostById(Long id) {
+    public ResponseEntity<GetPostResponse> getPostById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         GetPostResponse getPostResponse = new GetPostResponse();
         getPostResponse.setId(post.getId());
@@ -92,11 +101,11 @@ public class PostServiceImpl implements PostService {
         getPostResponse.setCategory(post.getCategory());
 
 //        getPostResponse.setComments(post.getComments());
-        return getPostResponse;
+        return ResponseEntity.ok(getPostResponse);
     }
 
     @Override
-    public PostDto updatePost(PostDto postDto, Long id) {
+    public ResponseEntity<PostDto> updatePost(PostDto postDto, Long id) {
         Post post  = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         post.setTitle(postDto.getTitle());
         post.setDescription(postDto.getDescription());
@@ -104,30 +113,32 @@ public class PostServiceImpl implements PostService {
 
         Post updatedPost = postRepository.save(post);
 
-        return mapToDto(updatedPost);
+        var r =  mapToDto(updatedPost);
+        return ResponseEntity.ok(r);
     }
 
     @Override
-    public void deletePostById(Long id) {
+    public ResponseEntity<String> deletePostById(Long id) {
         postRepository.delete(postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id)));
+        return ResponseEntity.ok("Post successfully deleted");
     }
 
-    @Override
-    public Post getPostByTitle(SearchDto searchDto) {
-
-        List<Post> posts = postRepository.findAll();
-        Optional<Post> post = posts.stream().filter(x -> x.getTitle().equals(searchDto.getTitle())).findFirst();
-//        GetPostResponse getPostResponse = new GetPostResponse();
-//        getPostResponse.setId(post.getId());
-//        getPostResponse.setTitle(post.getTitle());
-//        getPostResponse.setDescription(post.getDescription());
-//        getPostResponse.setContent(post.getContent());
-//        getPostResponse.setLikeCount(post.getLikeCount());
-//        getPostResponse.setCategory(post.getCategory());
-
-//        getPostResponse.setComments(post.getComments());
-        return post.orElse(null);
-    }
+//    @Override
+//    public Post getPostByTitle(SearchDto searchDto) {
+//
+//        List<Post> posts = postRepository.findAll();
+//        Optional<Post> post = posts.stream().filter(x -> x.getTitle().equals(searchDto.getTitle())).findFirst();
+////        GetPostResponse getPostResponse = new GetPostResponse();
+////        getPostResponse.setId(post.getId());
+////        getPostResponse.setTitle(post.getTitle());
+////        getPostResponse.setDescription(post.getDescription());
+////        getPostResponse.setContent(post.getContent());
+////        getPostResponse.setLikeCount(post.getLikeCount());
+////        getPostResponse.setCategory(post.getCategory());
+//
+////        getPostResponse.setComments(post.getComments());
+//        return post.orElse(null);
+//    }
 
     private Post mapToEntity(PostDto postDto) {
         return modelMapper.map(postDto, Post.class);

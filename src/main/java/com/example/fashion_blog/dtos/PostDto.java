@@ -1,9 +1,7 @@
 package com.example.fashion_blog.dtos;
 
 import com.example.fashion_blog.entities.Category;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,6 +10,9 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PostDto {
 
     private Long id;

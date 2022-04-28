@@ -14,28 +14,25 @@ import java.util.Collections;
 class UserRepositoryTest {
 
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-
-
     @Autowired
-    UserRepositoryTest(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private UserRepository userRepository;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+
+
 
     @Test
     public void givenUserObject_whenSave_thenReturnSavedEmployee() {
 
-        Role role = new Role();
-        role.setName("ROLE_USER");
+//        Role role = new Role();
+//        role.setName("ROLE_USER");
         User user = new User();
                 user.setFullName("Lawal Abideen");
                 user.setUsername("deenn");
                 user.setEmail("lawal@gmail.com");
-                user.setPassword(passwordEncoder.encode("12345"));
+                user.setPassword("12345");
 
-                user.setRoles(Collections.singleton(role));
+//                user.setRoles(Collections.singleton(role));
 
         User savedUser = userRepository.save(user);
         Assertions.assertThat(savedUser).isNotNull();

@@ -30,10 +30,9 @@ public class PostController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
-//       return new ResponseEntity<>(postService.create(postDto), HttpStatus.CREATED);
-        return ResponseEntity.status(HttpStatus.CREATED).body(postService.create(postDto));
-
+        return postService.create(postDto);
     }
+
 
 //    @PostMapping("/searchDto")
 //    public ResponseEntity<Post> getPost(@RequestBody SearchDto searchDto) {
@@ -47,24 +46,23 @@ public class PostController {
                                                     @RequestParam(value = "pageSize", defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
                                                     @RequestParam(value = "sortBy", defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,
                                                     @RequestParam(value = "sortDir", defaultValue = DEFAULT_SORT_DIRECTION, required = false) String sortDir ) {
-        return ResponseEntity.ok(postService.getAllPost(pageNo,pageSize, sortBy, sortDir));
+        return postService.getAllPost(pageNo,pageSize, sortBy, sortDir);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GetPostResponse> getPostById(@PathVariable Long id) {
-        return ResponseEntity.ok(postService.getPostById(id));
+        return postService.getPostById(id);
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable Long id) {
-        return ResponseEntity.ok(postService.updatePost(postDto,id));
+        return postService.updatePost(postDto,id);
     }
 
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
-        postService.deletePostById(id);
-        return  ResponseEntity.ok("Post deleted Successfully");
+        return postService.deletePostById(id);
     }
 }

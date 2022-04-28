@@ -31,7 +31,4 @@ public class CategoryServiceImpl implements CategoryService {
         return modelMapper.map(categoryDto, Category.class);
     }
 
-    private CategoryDto mapToDto(Category category) {
-        return modelMapper.map(category, CategoryDto.class);
-    }
 }

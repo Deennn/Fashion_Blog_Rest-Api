@@ -1,12 +1,13 @@
 package com.example.fashion_blog.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 @Getter @Setter @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryDto {
     private Long id;
 

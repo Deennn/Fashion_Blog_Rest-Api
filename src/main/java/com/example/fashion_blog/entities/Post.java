@@ -10,6 +10,7 @@ import java.util.Set;
 @Getter @Setter @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table( name = "posts", uniqueConstraints = {@UniqueConstraint(columnNames = "title")})
 public class Post {
