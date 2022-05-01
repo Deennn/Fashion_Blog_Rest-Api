@@ -4,6 +4,7 @@ import com.example.fashion_blog.dtos.CommentDto;
 import com.example.fashion_blog.entities.Category;
 import com.example.fashion_blog.entities.Comment;
 import com.example.fashion_blog.entities.Post;
+import com.example.fashion_blog.exceptions.BlogApiException;
 import com.example.fashion_blog.repositories.CommentRepository;
 import com.example.fashion_blog.repositories.PostRepository;
 import org.assertj.core.api.Assertions;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,15 +89,98 @@ class CommentServiceImplTest {
 
     @Test
     void getCommentById() {
-        Post post = new Post();
-        Comment comment = new Comment();
+
+
+
+        Post post = Post.builder()
+                .id(1L)
+                .title("games")
+                .description("ashsdasd")
+                .content("aksdjabsad")
+//
+                .likeCount(1)
+//
+                .build();
+
+        Post post2 = Post.builder()
+                .id(3L)
+                .title("games")
+                .description("ashsdasd")
+                .content("aksdjabsad")
+//
+                .likeCount(1)
+//
+                .build();
+        Comment comment = Comment.builder()
+                .id(1L)
+                .name("deenn")
+                .email("deenn@gmail.com")
+                .post(post)
+                .body("nice")
+                .build();
+
         CommentDto commentDto = new CommentDto();
-        when(postRepository.findById(1L)).thenReturn(Optional.of(post));
-        when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
+
+        when(postRepository.findById(post2.getId())).thenReturn(Optional.of(post2));
+        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+//        when(modelMapper.map(comment, CommentDto.class)).thenReturn(commentDto);
+//        CommentDto commentDto1 = commentService.getCommentById(post.getId(), comment.getId());
+
+//        Assertions.assertThat(commentDto1).;
+        org.junit.jupiter.api.Assertions.assertThrows( BlogApiException.class, () -> {
+            commentService.getCommentById(post2.getId(), comment.getId());
+        });
+
+
+
+
+    }
+
+    @Test
+    void getCommentByIds() {
+
+
+
+        Post post = Post.builder()
+                .id(1L)
+                .title("games")
+                .description("ashsdasd")
+                .content("aksdjabsad")
+//
+                .likeCount(1)
+//
+                .build();
+
+//        Post post2 = Post.builder()
+//                .id(3L)
+//                .title("games")
+//                .description("ashsdasd")
+//                .content("aksdjabsad")
+////
+//                .likeCount(1)
+////
+//                .build();
+        Comment comment = Comment.builder()
+                .id(1L)
+                .name("deenn")
+                .email("deenn@gmail.com")
+                .post(post)
+                .body("nice")
+                .build();
+
+        CommentDto commentDto = new CommentDto();
+
+        when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
+        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
         when(modelMapper.map(comment, CommentDto.class)).thenReturn(commentDto);
-        CommentDto commentDto1 = commentService.getCommentById(1L, 1L);
+        CommentDto commentDto1 = commentService.getCommentById(post.getId(), comment.getId());
 
         Assertions.assertThat(commentDto1).isNotNull();
+//        org.junit.jupiter.api.Assertions.assertThrows( BlogApiException.class, () -> {
+//            commentService.getCommentById(post.getId(), comment.getId());
+//        });
+
+
 
 
     }

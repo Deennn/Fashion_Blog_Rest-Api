@@ -1,7 +1,7 @@
 package com.example.fashion_blog.services.servicesImpl;
 
 import com.example.fashion_blog.entities.Like;
-import com.example.fashion_blog.entities.Post;
+
 import com.example.fashion_blog.exceptions.ResourceNotFoundException;
 import com.example.fashion_blog.repositories.LikeRepository;
 import com.example.fashion_blog.repositories.PostRepository;

@@ -16,6 +16,7 @@ import javax.validation.Valid;
 
 import static com.example.fashion_blog.utils.AppConstants.*;
 
+
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
